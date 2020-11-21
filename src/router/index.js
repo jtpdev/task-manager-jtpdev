@@ -1,29 +1,65 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Router from 'vue-router'
+import store from '../store'
 
-Vue.use(VueRouter)
+const Login = () => import('@/views/Login')
+const SignUp = () => import('@/views/SignUp')
+const Home = () => import('@/views/Home')
+const Task = () => import('@/views/Task')
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+Vue.use(Router)
+
+const checkAuth = (to, from, next) => {
+  console.log(store.getters.authenticated)
+  if (store.getters.authenticated) {
+    next();
+  } else {
+    next({name: 'login'});
   }
-]
+}
 
-const router = new VueRouter({
+function configRoutes() {
+  return [
+    {
+      path: '/',
+      redirect: '/home',
+      name: 'Home',
+      beforeEnter: checkAuth,
+    },
+    {
+      path: '/home',
+      name: 'HomePage',
+      component: Home,
+      beforeEnter: checkAuth,
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: SignUp
+    },
+    {
+      path: '/task',
+      name: 'Create-Task',
+      component: Task,
+      beforeEnter: checkAuth
+    },
+    {
+      path: '/task/:id',
+      name: 'Edit-Task',
+      component: Task,
+      beforeEnter: checkAuth
+    },
+  ]
+}
+
+export default new Router({
   mode: 'history',
-  base: process.env.BASE_URL,
-  routes
+  linkActiveClass: 'open active',
+  scrollBehavior: () => ({ y: 0 }),
+  routes: configRoutes()
 })
-
-export default router

@@ -1,13 +1,18 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+    <Header v-if="$store.getters.authenticated"/>
     <router-view/>
   </div>
 </template>
-
+<script>
+  import Header from '@/components/Header.vue'
+  export default {
+    name: 'App',
+    components: {
+      Header,
+    }
+  }
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

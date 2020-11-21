@@ -2,6 +2,19 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import Buefy from 'buefy'
+import 'buefy/dist/buefy.css'
+import VeeValidate from 'vee-validate';
+import './ml';
+
+Vue.use(Buefy)
+
+Vue.use(VeeValidate);
+
+const moment = require('moment')
+require('moment/locale/pt-br')
+Vue.use(require('vue-moment'), {moment})
+
 
 Vue.config.productionTip = false
 
